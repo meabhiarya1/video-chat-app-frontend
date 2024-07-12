@@ -112,7 +112,7 @@ const Room = () => {
 
   return (
     <div className="p-4 flex flex-col">
-      <h4 className="text-white flex justify-center p-4 text-5xl">
+      <h4 className="text-white flex justify-center p-4 text-3xl">
         {remoteSocketId ? `You are Connected...` : "No one in room"}
       </h4>
 
@@ -138,12 +138,13 @@ const Room = () => {
 
       {/* my stream and remote stream */}
       <div className="flex flex-col md:flex-row justify-center">
+
         {/* my stream */}
         <div className="flex flex-col justify-center">
           <h3 className="text-white mx-4 text-center font-medium text-3xl p-2 my-2">
             My Stream
           </h3>
-          <span className="m-0">{myStream && <ReactPlayer url={myStream} playing />}</span>
+          <span className="m-0">{myStream && <ReactPlayer url={myStream} playing muted />}</span>
         </div>
 
         {/* remote stream */}
