@@ -35,7 +35,7 @@ const Home = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className=" bg-gray-800 rounded-lg shadow-lg p-8">
-        <h2 className="text-white text-5xl font-medium m-4 p-4 flex justify-center">
+        <h2 className="text-white text-3xl font-medium m-4 p-4 flex justify-center">
           Try video call...
         </h2>
         <form onSubmit={handleSubmitForm}>
