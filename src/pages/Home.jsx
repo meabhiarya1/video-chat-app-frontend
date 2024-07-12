@@ -4,54 +4,70 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { socket } = useSocket();
-  const [emailID, setEmailID] = useState();
-  const [roomID, setRoomID] = useState();
+  const [email, setEmail] = useState();
+  const [room, setRoom] = useState();
 
   const navigate = useNavigate();
 
-  const handleRoomJoined = useCallback(
-    ({ roomID }) => {
-      navigate(`/room/${roomID}`);
+  const handleSubmitForm = useCallback(
+    (e) => {
+      e.preventDefault();
+      socket.emit("room:join", { email, room });
+    },
+    [room, email, socket]
+  );
+
+  const handleJoinRoom = useCallback(
+    (data) => {
+      const { email, room } = data;
+      navigate(`/room/${room}`);
     },
     [navigate]
   );
 
   useEffect(() => {
-    socket.on("joined-room", handleRoomJoined);
+    socket.on("room:join", handleJoinRoom);
     return () => {
-      socket.off("joined-room", handleRoomJoined);
+      socket.off("room:join", handleJoinRoom);
     };
-  }, [handleRoomJoined, socket]);
-
-  const handleRoomJoin = () => {
-    socket.emit("join-room", { emailID, roomID });
-  };
+  }, [socket, handleJoinRoom]);
 
   return (
-    <>
-      <h2 className="text-white text-5xl font-medium m-4 p-4">
-        Try video call...
-      </h2>
-      <div>
-        <input
-          type="email"
-          value={emailID}
-          onChange={(e) => setEmailID(e.target.value)}
-          placeholder="Enter your email here..."
-          className="p-2 m-2 rounded-lg"
-        />
-        <input
-          type="text1"
-          value={roomID}
-          onChange={(e) => setRoomID(e.target.value)}
-          placeholder="Enter Room ID..."
-          className="p-2 m-2 rounded-lg"
-        />
-        <button type="submit" className="m-2" onClick={handleRoomJoin}>
-          Enter Room
-        </button>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900">
+      <div className=" bg-gray-800 rounded-lg shadow-lg p-8">
+        <h2 className="text-white text-5xl font-medium m-4 p-4 flex justify-center">
+          Try video call...
+        </h2>
+        <form onSubmit={handleSubmitForm}>
+          <div>
+            <input
+              type="text"
+              value={email}
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your name here..."
+              className="p-2 m-2 rounded-lg"
+              required
+            />
+            <input
+              type="text"
+              value={room}
+              id="room"
+              onChange={(e) => setRoom(e.target.value)}
+              placeholder="Enter Room ID..."
+              className="p-2 m-2 rounded-lg"
+              required
+            />
+            <button
+              type="submit"
+              className="m-2 py-2 px-4 bg-blue-500 text-white rounded-lg"
+            >
+              Join
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 
